@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="/index.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css"
+    integrity="sha512-hoalWLoI8r4UszCkZ5kL8vayOGVae1oxXe/2A4AO6J9+580uKHDO3JdHb7NzwwzK5xr/Fs0W40kiNHxM9vyTtQ=="
+    crossorigin=""/> 
+    <script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js"
+    integrity="sha512-BB3hKbKWOc9Ez/TAwyWxNXeoV9c1v6FIeYiBieIWkpLjauysF18NzgR1MBNBXf8/KABdlkX68nAhlwcDFLGPCQ=="
+    crossorigin=""></script>
+    <style>
+      .leaflet-popup-content-wrapper{
+        background-color: orange;
+        border-radius: 2px;
+      }
+
+    .leaflet-popup-tip{
+      background-color: orange;
+    }
+    </style>
+</head>
+<body>
+		<div>
+			<input type="text" class="search_box" />
+		</div>
+		<div class="games_list"></div>
+  <div id="map"></div>
+  <script>
+    var map = L.map('map').setView([12.973111, 77.591233], 13);
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '© OpenStreetMap'
+    }).addTo(map);
+
+    var greenIcon = L.icon({
+      iconUrl: '/bulb.png',
+      iconSize:     [37, 37], // size of the icon
+      // shadowSize:   [50, 64], // size of the shadow
+      iconAnchor:   [17, 27], // point of the icon which will correspond to marker's location
+      // shadowAnchor: [4, 62],  // the same for the shadow
+      popupAnchor:  [0, -16] // point from which the popup should open relative to the iconAnchor
+    });
+
+    var popup = L.popup()
+    .setLatLng([12.973111, 77.591233])
+    .setContent("<img src='https://via.placeholder.com/100x50' />")
+    .openOn(map);
+
+    L.circle([12.973111, 77.591233], {
+      color: 'blue',
+      fillColor: '#f03',
+      fillOpacity: 0.5,
+      weight:0.5,
+      radius: 1000
+    }).addTo(map);
+
+    // var popup = L.popup()
+    // .setLatLng([12.973111, 77.591233])
+    // .setContent("I am a standalone popup.")
+    // .openOn(map);
+
+    // function onMapClick(e) {
+    //   alert("You clicked the map at " + e.latlng);
+    // } 
+
+    L.marker([12.973111, 77.591233], {icon: greenIcon}).addTo(map).bindPopup(popup)
+
+    // L.marker([13.973111, 78.591233], {icon: greenIcon}).addTo(map)
+    // map.on('click', onMapClick);
+
+    // var popup = L.popup();
+
+    // function onMapClick(e) {
+    //     popup
+    //     .setLatLng(e.latlng)
+    //     .setContent("You clicked the map at " + e.latlng.toString())
+    //     .openOn(map);
+    // }
+//Insert code below
+const searchBar=document.querySelector(".search_box")
+const gamesListBox=document.querySelector(".gamesList")
+
+const getGamesList=async()=>{
+	const response=await fetch("https://s3-ap-southeast-1.amazonaws.com/he-public-data/gamesarena274f2bf.json")
+	const data=(await response.json()).slice(1)
+  console.log(data)
+	return data
+}
+
+searchBar.addEventListener("search",(e)=>{
+  // localStorage.setItem("query",e.target.value)
+  console.log(e.target.value)
+  // console.log(displayGames())
+})
+
+// const displayGames=()=>{
+//   const games=[] || getGamesList() 
+//   // console.log(games)
+// 	let finalGamesList
+// 	const queryVal=localStorage.getItem('query')
+// 	finalGamesList=queryVal?.trim().length===0?[...games]:[...games].filter(game=>{
+//     if(game.title.includes(queryVal.toLowerCase)){
+//       return game
+// 		}
+// 		else if(game.platform.includes(queryVal.toLowerCase)){
+//       return game
+// 		}
+// 		else if(game.score.includes(queryVal.toLowerCase)){
+// 			return game
+// 		}
+// 		else if(game.genre.includes(queryVal.toLowerCase)){
+// 			return game
+// 		}
+// 		else if(game["editors_choice"].includes(queryVal.toLowerCase)){
+//       return game
+// 		}
+// 		return 0
+// 	})
+//   return finalGamesList
+// 	// finalGamesList.forEach()
+// }
+
+    // map.on('click', onMapClick);
+
+
+  </script>
+</body>
+</html>
